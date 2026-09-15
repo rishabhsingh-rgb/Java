@@ -1,4 +1,5 @@
-class commanFactors {
+//leetcode 2427
+class commanFactors{
     public int commonFactors(int a, int b) {
         int count=0;
         for(int i=1;i<=1000;i++){
