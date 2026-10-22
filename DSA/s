@@ -1,0 +1,75 @@
+class Solution {
+    static boolean isSafeToPlace(char[][] board,char charValue,int rowIndex,int colIndex){
+        //check for same row
+        for(int col=0;col<9;col++){
+            if(board[rowIndex][col]==charValue){
+                return false;
+            }
+        }
+        //check for same col
+        for(int row=0;row<9;row++){
+            if(board[row][colIndex]==charValue){
+                return false;
+            }
+        }
+        //3x3 ke sub-box me check
+        int startingRow=rowIndex-rowIndex%3;
+        int startingCol=colIndex-colIndex%3;
+        //travel on sub-box
+        for(int i=0;i<3;i++){
+            for(int j=0;j<3;j++){
+                if(board[startingRow+i][startingCol+j]==charValue){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    static boolean findEmptyCell(char[][] board,int[] emptyCell){
+        for(int i=0;i<9;i++){
+            for(int j=0;j<9;j++){
+                if(board[i][j]=='.'){
+                    //store empty cell ki row
+                    emptyCell[0]=i;
+                    //store empty cell ki col
+                    emptyCell[1]=j;
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    static boolean sudokuHelper(char[][] board){
+        //base case 
+        //no empty space in board
+        int[] emptyCell=new int[2];
+        if(!findEmptyCell(board,emptyCell)){
+            return true;
+        }
+        //if i found an empty call
+        int rowIndex=emptyCell[0];
+        int colIndex=emptyCell[1];
+        for(int value=1;value<=9;value++){
+            char charValue=(char)(value+'0');
+            if(isSafeToPlace(board,charValue,rowIndex,colIndex)){
+                //place kardo
+                board[rowIndex][colIndex]=charValue;
+                //baki recursion 
+                if(sudokuHelper(board)==true){
+                    return true;
+                }
+                //agar recursion solve nahi kar paya or wapas aa gaya
+                //current value ko undo karo or backtracking karo
+                board[rowIndex][colIndex]='.';
+
+            }
+        }
+
+        //not able to solve the problem
+        return false;
+
+    }
+    public void solveSudoku(char[][] board) {
+        sudokuHelper(board);
+    }
+}
